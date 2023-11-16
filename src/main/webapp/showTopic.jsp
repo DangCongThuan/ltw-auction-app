@@ -25,7 +25,7 @@
 <body>
 <div style="text-align: right">
     <b>
-        Chào ${user.username} | <a href="logout">Thoát</a>
+        Chào  <span style="color: blue">${user.username}</span> | <a href="logout">Thoát</a>
     </b>
 </div>
 <h1>${item.description}</h1>
@@ -46,7 +46,7 @@
             <c:set value="${item.bids.size()}" var="bidsSize"/>
             <div><b>Giá hiện tại: </b><fmt:formatNumber value="${item.currentPrice}" type="currency" currencySymbol="VND"/></div>
             <div><b>Người đặt: </b> <a href="">${item.bids[bidsSize -1].bidder.username}</a> (có ${bidsSize} đặt giá)</div>
-            <div><b>Giá khởi điểm: </b>${item.initialPrice}</div>
+            <div><b>Giá khởi điểm: </b><fmt:formatNumber value="${item.initialPrice}" type="currency" currencySymbol="VND"/></div>
             <div><b>Bước giá: </b><fmt:formatNumber value="${item.priceStep}" type="currency" currencySymbol="VND"/></div>
             <div style="color: red"><b>Bắt đầu lúc: <fmt:formatDate value="${item.startDate.time}"  pattern = "HH:mm:ss dd/MM/yyyy"/></b></div>
             <div><b>Kết thúc lúc: </b> <fmt:formatDate value="${item.endDate.time}"  pattern = "HH:mm:ss dd/MM/yyyy"/></div>
@@ -54,9 +54,15 @@
             <form action="bid-action" method="post">
                 <label><b>Giá đặt: </b></label>
                 <input name="id" value="${item.id}" hidden>
-                <input type="number" name="amount" id="amount" min="${item.currentPrice + item.priceStep}">
+                <c:if test="${item.currentPrice == 0}">
+                    <c:set var="amount" value="${item.initialPrice + item.priceStep}"/>
+                </c:if>
+                <c:if test="${item.currentPrice != 0}">
+                    <c:set var="amount" value="${item.currentPrice + item.priceStep}"/>
+                </c:if>
+                <input type="number" name="amount" id="amount" min="${amount}">
                 <span> >=
-            <fmt:formatNumber value="${item.currentPrice + item.priceStep}" type="currency" currencySymbol=""/>
+            <fmt:formatNumber value="${amount}" type="currency" currencySymbol=""/>
         </span><br><br>
                 <button>Đặt giá</button>
             </form>

@@ -28,10 +28,15 @@ public class BidAction extends HttpServlet {
         Long id = Long.valueOf(request.getParameter("id"));
         double amount = Double.parseDouble(request.getParameter("amount"));
         AuctionItem auctionItem = auctionService.getAuctionItem(id);
-        if (amount >= auctionItem.getCurrentPrice() + auctionItem.getPriceStep()) {
+        double checkAmount = 0;
+        if (auctionItem.getCurrentPrice() == 0) {
+            checkAmount = auctionItem.getInitialPrice() + auctionItem.getPriceStep();
+        } else {
+            checkAmount = auctionItem.getCurrentPrice() + auctionItem.getPriceStep();
+        }
+        if (amount >= checkAmount) {
             auctionService.bid(user, auctionItem, amount);
             response.sendRedirect("list-items");
         }
-
     }
 }

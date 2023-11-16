@@ -29,7 +29,9 @@
 </head>
 <body>
   <div style="text-align: right">
-    Chào mừng ${user.username} | <a href="logout">Thoát</a>
+      <b>
+      Chào  <span style="color: blue">${user.username}</span> | <a href="logout">Thoát</a>
+      </b>
   </div>
  <h1>Danh mục các mặt hàng đấu giá </h1>
 <table>
@@ -47,8 +49,10 @@
                 </td>
                 <td>
                     <span>Giá khởi đầu: <fmt:formatNumber value="${item.initialPrice}" type="currency" currencySymbol="VND"/></span><br>
+                    <c:if test="${item.bids.size() > 0}">
                     <span>Giá hiện tại: <fmt:formatNumber value="${item.currentPrice}" type="currency" currencySymbol="VND"/></span><br>
-                    <span>${item.bids.size()} lời đặt giá</span>
+                    <span>(${item.bids.size()} lời đặt giá)</span>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>
